@@ -1,26 +1,26 @@
 package hellojpa;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-//@Table(name = "USER")
+//@Table(name = "MBR")
 public class Member {
 
     @Id
+    @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
-    //@Column(name = "USERNAME")
-    private String name;
 
-    public Member() {
-    }
+    @Column(name = "USERNAME")
+    private String username;
 
-    public Member(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+//    @Column(name = "TEAM_ID")
+//    private Long teamId;
+
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
+
 
     public Long getId() {
         return id;
@@ -30,11 +30,21 @@ public class Member {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void changeTeam(Team team) {
+        this.team = team;
+
+        team.getMembers().add(this); // 연관관계 편의 메소드 (권장)
     }
 }
