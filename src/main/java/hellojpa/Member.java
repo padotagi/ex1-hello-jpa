@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 //@Table(name = "MBR")
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -20,6 +20,10 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
     private Team team;
+
+    @OneToOne
+    @JoinColumn(name = "LOCKER_ID")
+    private Locker locker;
 
 
     public Long getId() {
@@ -46,5 +50,13 @@ public class Member {
         this.team = team;
 
         team.getMembers().add(this); // 연관관계 편의 메소드 (권장)
+    }
+
+    public Locker getLocker() {
+        return locker;
+    }
+
+    public void setLocker(Locker locker) {
+        this.locker = locker;
     }
 }
