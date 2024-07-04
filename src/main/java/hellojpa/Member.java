@@ -21,10 +21,6 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
-
 
     public Long getId() {
         return id;
@@ -50,13 +46,5 @@ public class Member extends BaseEntity {
         this.team = team;
 
         team.getMembers().add(this); // 연관관계 편의 메소드 (권장)
-    }
-
-    public Locker getLocker() {
-        return locker;
-    }
-
-    public void setLocker(Locker locker) {
-        this.locker = locker;
     }
 }
