@@ -5,90 +5,58 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
-import java.time.LocalDateTime;
-
-
 public class JpaMain {
 
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
-
         EntityManager em = emf.createEntityManager();
 
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
         try {
-//            Member member = new Member();
-//            member.setUsername("hello");
+//            Team team = new Team();
+//            team.setName("teamA");
+//            em.persist(team);
 //
-//            em.persist(member);
+//            Member member1 = new Member();
+//            member1.setUsername("member1");
+//            member1.setTeam(team);
+//            em.persist(member1);
 //
 //            em.flush();
 //            em.clear();
 //
-//            Member findMember = em.getReference(Member.class, member.getId());
-//            System.out.println("findMember = " + findMember.getClass()); //
+//            Member m = em.find(Member.class, member1.getId());
 //
-//            System.out.println("findMember.id = " + findMember.getId());
-//            System.out.println("findMember.username = " + findMember.getUsername());
+//            System.out.println("m = " + m.getTeam().getClass());
+//
+//            System.out.println("=============");
+//            m.getTeam().getName(); // 실제 team을 사용하는 시점에 초기화
+//            System.out.println("=============");
 
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            em.persist(member1);
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            em.persist(member2);
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
+            // replace with cascade
+//            em.persist(child1);
+//            em.persist(child2);
 
             em.flush();
             em.clear();
 
-// ex1.
-//            Member m1 = em.find(Member.class, member1.getId());
-//            Member m2 = em.getReference(Member.class, member2.getId());
-//
-//            logic(m1, m2);
-
-// ex2.
-//            Member m1 = em.find(Member.class, member1.getId());
-//            System.out.println("m1 = " + m1.getClass());
-//
-//            Member reference = em.getReference(Member.class, member1.getId());
-//            System.out.println("reference = " + reference.getClass());
-//
-//            System.out.println("a == a: " + (m1 == reference));
-
-// ex3.
-//            Member refMember = em.getReference(Member.class, member1.getId());
-//            System.out.println("refMember = " + refMember.getClass()); //Proxy
-//
-//            Member findMember = em.find(Member.class, member1.getId());
-//            System.out.println("findMember = " + findMember.getClass()); //Member
-//
-//            System.out.println("refMember == findMember: " + (refMember == findMember));
-
-//ex4. common
-//            Member refMember = em.getReference(Member.class, member1.getId());
-//            System.out.println("refMember = " + refMember.getClass()); //Proxy
-//
-//            //em.detach(refMember);
-//            //em.close();
-//            em.clear();
-//
-//            refMember.getUsername();
-
-//ex5.
-            Member refMember = em.getReference(Member.class, member1.getId());
-            System.out.println("refMember = " + refMember.getClass()); //Proxy
-
-            refMember.getUsername(); //
-            System.out.println("isLoaded= " + emf.getPersistenceUnitUtil().isLoaded(refMember));
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildList().remove(0);
 
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
-            e.printStackTrace(); //ex4.
+            e.printStackTrace();
         } finally {
             em.close();
         }

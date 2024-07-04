@@ -17,7 +17,7 @@ public class Member extends BaseEntity {
 //    @Column(name = "TEAM_ID")
 //    private Long teamId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // <-> FetchType.EAGER (@~ToOne 의 default, but not recommended)
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
@@ -42,9 +42,7 @@ public class Member extends BaseEntity {
         return team;
     }
 
-    public void changeTeam(Team team) {
+    public void setTeam(Team team) {
         this.team = team;
-
-        team.getMembers().add(this); // 연관관계 편의 메소드 (권장)
     }
 }
